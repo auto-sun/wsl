@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div id="prescriptionSummary" class="summary-card-grid"></div>
+</section>
+
+<div class="content-grid content-grid-split">
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">策略雷达</p>
+                <h3>处方目标分配</h3>
+            </div>
+            <span class="panel-tag">多因子平衡</span>
+        </div>
+        <div id="prescriptionRadarChart" class="chart-canvas chart-tall"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">执行时段</p>
+                <h3>灌溉施肥排程</h3>
+            </div>
+            <span class="panel-tag">策略预览</span>
+        </div>
+        <div id="prescriptionScheduleChart" class="chart-canvas chart-tall"></div>
+    </section>
+</div>
+
+<div class="content-grid content-grid-split">
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">地块处方</p>
+                <h3>分区建议清单</h3>
+            </div>
+            <span class="panel-tag">待联控</span>
+        </div>
+        <div id="prescriptionTable" class="table-shell"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">接口预留</p>
+                <h3>控制链路与 TODO</h3>
+            </div>
+            <span class="panel-tag">MQTT 占位</span>
+        </div>
+        <div id="dispatchPreview" class="narrative-card"></div>
+        <div id="prescriptionTodos" class="todo-list mt-3"></div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/prescription.js' %}"></script>
+{% endblock %}

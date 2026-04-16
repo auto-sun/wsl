@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
+<link rel="stylesheet" href="/static/css/monitoring.css">
+{% endblock %}
+
+{% block content %}
+<section class="monitoring-shell">
+    <section class="monitoring-hero monitoring-panel">
+        <div class="hero-copy">
+            <p class="eyebrow">Growth Monitoring Center</p>
+            <h3>火龙果种植区长势监测</h3>
+            <p>
+                围绕火龙果地块长势、NDVI 健康指数、热力分布与无人机巡检记录构建统一监测界面，
+                当前阶段采用 mock 数据演示，并预留未来接入无人机航测、遥感识别、多光谱分析的位置。
+            </p>
+        </div>
+        <div class="hero-badge-group">
+            <div class="hero-badge">
+                <span>数据模式</span>
+                <strong>Mock 演示</strong>
+            </div>
+            <div class="hero-badge">
+                <span>地图组件</span>
+                <strong>Mapbox GL</strong>
+            </div>
+            <div class="hero-badge">
+                <span>图表组件</span>
+                <strong>ECharts</strong>
+            </div>
+        </div>
+    </section>
+
+    <section class="monitoring-filter-bar monitoring-panel">
+        <div class="filter-group">
+            <label for="blockFilter">地块筛选</label>
+            <select id="blockFilter"></select>
+        </div>
+        <div class="filter-group">
+            <label for="startDate">开始时间</label>
+            <input id="startDate" type="date">
+        </div>
+        <div class="filter-group">
+            <label for="endDate">结束时间</label>
+            <input id="endDate" type="date">
+        </div>
+        <div class="filter-actions">
+            <button id="applyMonitoringFilter" type="button" class="btn-neon-alt">应用筛选</button>
+            <button id="resetMonitoringFilter" type="button" class="btn-outline-soft">重置</button>
+        </div>
+        <div class="filter-status">
+            <span>当前视图</span>
+            <strong id="monitoringFilterStatus">全部地块 / 全时段</strong>
+        </div>
+    </section>
+
+    <section id="monitoringSummaryCards" class="monitoring-summary-row"></section>
+
+    <div class="monitoring-grid">
+        <section class="monitoring-panel chart-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Growth Grade</p>
+                    <h4>长势等级分布图</h4>
+                </div>
+                <span class="panel-chip">等级分层</span>
+            </div>
+            <div id="growthGradeChart" class="monitoring-chart"></div>
+        </section>
+
+        <section class="monitoring-panel drone-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">UAV Patrol</p>
+                    <h4>无人机巡检信息卡片</h4>
+                </div>
+                <span id="droneStatusTag" class="panel-chip">巡检中</span>
+            </div>
+            <div id="droneInfoCard" class="drone-info-body"></div>
+        </section>
+
+        <section class="monitoring-panel chart-card trend-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Growth Trend</p>
+                    <h4>长势趋势折线图</h4>
+                </div>
+                <span class="panel-chip">时间序列</span>
+            </div>
+            <div id="growthTrendChart" class="monitoring-chart"></div>
+        </section>
+
+        <section class="monitoring-panel chart-card ndvi-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">NDVI & Health</p>
+                    <h4>NDVI / 健康指数占位图</h4>
+                </div>
+                <span class="panel-chip">多光谱预留</span>
+            </div>
+            <div id="ndviChart" class="monitoring-chart"></div>
+            <div id="futureExtensions" class="future-note-list"></div>
+        </section>
+
+        <section class="monitoring-panel map-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Heatmap</p>
+                    <h4>地图热力分布区</h4>
+                </div>
+                <span class="panel-chip">Mapbox GL</span>
+            </div>
+            <div id="monitoringMap" class="monitoring-map"></div>
+        </section>
+
+        <section class="monitoring-panel record-card">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Patrol Records</p>
+                    <h4>巡检记录列表</h4>
+                </div>
+                <span class="panel-chip">巡检日志</span>
+            </div>
+            <div id="inspectionRecordList" class="inspection-list"></div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="/static/js/monitoring.js"></script>
+{% endblock %}

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>{{ page_title }} | {{ system_meta.NAME }}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="page-{{ page_key|default:'default' }}">
+    <div class="app-backdrop">
+        <span class="glow-orb orb-a"></span>
+        <span class="glow-orb orb-b"></span>
+        <span class="glow-orb orb-c"></span>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand-panel">
+                <span class="brand-tag">DragonFruit AI Farm</span>
+                <h1>{{ system_meta.NAME }}</h1>
+                <p>{{ system_meta.SUBTITLE }}</p>
+                <div class="brand-mini-row">
+                    <span>火龙果数字农场</span>
+                    <span>UAV 巡检联动</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                {% for item in nav_items %}
+                <a href="{{ item.path }}" class="nav-item {% if current_path == item.path %}active{% endif %}">
+                    <span>{{ item.label }}</span>
+                    <small>{{ item.path }}</small>
+                </a>
+                {% endfor %}
+            </nav>
+
+            <div class="phase-panel">
+                <span>当前阶段</span>
+                <strong>{{ system_meta.CURRENT_PHASE }}</strong>
+            </div>
+        </aside>
+
+        <div class="main-layout">
+            <header class="topbar">
+                <div class="topbar-main">
+                    <nav class="app-breadcrumb" aria-label="breadcrumb">
+                        {% for crumb in breadcrumbs %}
+                        <a href="{{ crumb.path }}" class="{% if forloop.last %}current{% endif %}">{{ crumb.label }}</a>
+                        {% endfor %}
+                    </nav>
+                    <p class="eyebrow">AI + 无人机 + 智慧农业</p>
+                    <h2>{{ page_title }}</h2>
+                    <p class="page-description">{{ page_description }}</p>
+                </div>
+                <div class="topbar-meta topbar-actions">
+                    <div class="meta-card user-card">
+                        <span>当前用户</span>
+                        <strong>{{ current_user.display_name|default:"访客" }}</strong>
+                        <small>{{ current_user.role|default:"未登录" }}</small>
+                    </div>
+                    <div class="meta-card">
+                        <span>系统状态</span>
+                        <strong>第一版可演示</strong>
+                        <small>Mock 数据 + 扩展预留</small>
+                    </div>
+                    <div class="meta-card">
+                        <span>当前时间</span>
+                        <strong id="currentTime">--</strong>
+                        <small>园区总控台</small>
+                    </div>
+                    {% if current_user %}
+                    <a href="/logout" class="btn-secondary topbar-link-btn">退出登录</a>
+                    {% endif %}
+                </div>
+            </header>
+
+            <main class="content-area">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <div id="appToastStack" class="app-toast-stack"></div>
+    <div id="globalLoading" class="global-loading is-hidden" aria-live="polite">
+        <div class="loader-ring"></div>
+        <span id="globalLoadingText">加载中...</span>
+    </div>
+    <div id="appModalOverlay" class="app-modal-overlay is-hidden">
+        <div class="app-modal">
+            <div class="app-modal-head">
+                <h3 id="appModalTitle">系统提示</h3>
+                <button id="appModalClose" type="button" class="modal-close-btn">×</button>
+            </div>
+            <div id="appModalBody" class="app-modal-body"></div>
+            <div class="app-modal-actions">
+                <button id="appModalConfirm" type="button" class="btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+    <script src="/static/js/page-utils.js"></script>
+    <script src="/static/js/chart-utils.js"></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

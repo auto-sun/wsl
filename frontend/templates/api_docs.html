@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero-panel">
+    <div>
+        <p class="eyebrow">API Overview</p>
+        <h3>项目接口简要文档</h3>
+        <p>当前阶段所有接口均基于 mock 数据或占位逻辑实现，已明确区分演示链路与未来真实模型、真实设备、真实时序数据的接入边界。</p>
+    </div>
+    <div class="brand-mini-row">
+        <a href="/api/" class="btn-secondary">打开 API 根入口</a>
+        <a href="/api/health" class="btn-ghost">查看健康检查</a>
+    </div>
+</section>
+
+<section class="split-grid">
+    <article class="feature-card">
+        <span>统一返回格式</span>
+        <h4>Response Format</h4>
+        <p><code>{"code": 0, "message": "ok", "data": {...}}</code></p>
+        <p>前端页面统一通过 `apiClient` 调用接口，并按该结构解析数据与错误提示。</p>
+    </article>
+    <article class="feature-card">
+        <span>登录与权限</span>
+        <h4>Auth Placeholder</h4>
+        <p>当前阶段采用基础登录校验占位。HTML 页面需先登录访问，API 为方便演示与调试仍默认开放。</p>
+        <p>后续可切换到 Django Auth、JWT、单点登录或更细粒度权限控制。</p>
+    </article>
+</section>
+
+<section class="card-grid">
+    <article class="feature-card">
+        <span>驾驶舱</span>
+        <h4>Dashboard</h4>
+        <p><code>GET /api/dashboard/overview</code></p>
+        <p>返回首页概览卡片、趋势图、热力地图、告警、快捷入口和无人机巡航占位数据。</p>
+    </article>
+    <article class="feature-card">
+        <span>长势监测</span>
+        <h4>Monitoring</h4>
+        <p><code>GET /api/monitoring/growth-summary</code></p>
+        <p><code>GET /api/monitoring/heatmap-data</code></p>
+        <p>返回长势总览、趋势、NDVI、巡检记录、热力地图数据，并预留多光谱/遥感接入位置。</p>
+    </article>
+    <article class="feature-card">
+        <span>病虫害检测</span>
+        <h4>Diagnosis</h4>
+        <p><code>POST /api/diagnosis/upload</code></p>
+        <p><code>GET /api/diagnosis/history</code></p>
+        <p>保存上传图片并返回 mock 推理结果，结构已与未来 PyTorch / ONNX / TensorFlow 模型接入兼容。</p>
+    </article>
+    <article class="feature-card">
+        <span>处方策略</span>
+        <h4>Decision</h4>
+        <p><code>GET /api/decision/plans</code></p>
+        <p><code>POST /api/decision/generate</code></p>
+        <p><code>POST /api/decision/dispatch</code></p>
+        <p>返回策略列表、生成新 mock 策略，并执行“下发预留”流程，不连接真实控制器。</p>
+    </article>
+    <article class="feature-card">
+        <span>设备管理</span>
+        <h4>Devices</h4>
+        <p><code>GET /api/devices/status</code></p>
+        <p><code>GET /api/devices/list</code></p>
+        <p><code>GET /api/devices/logs?device_code=CAM-01</code></p>
+        <p><code>POST /api/devices/test</code></p>
+        <p><code>POST /api/devices/command</code></p>
+        <p>返回设备状态、日志和占位动作结果，明确说明当前未接真实硬件与真实 MQTT Broker。</p>
+    </article>
+    <article class="feature-card">
+        <span>健康检查</span>
+        <h4>Infra Placeholders</h4>
+        <p><code>GET /api/health</code></p>
+        <p>返回 MySQL、Redis、InfluxDB、MQTT、AI 服务的当前占位配置，用于演示系统扩展骨架。</p>
+    </article>
+</section>
+
+<section class="split-grid">
+    <article class="feature-card">
+        <span>Mock 数据说明</span>
+        <h4>Current Mock Boundary</h4>
+        <p>当前图表、地图、设备状态、策略结果、病虫害推理结果均来自后端 mock 数据与占位服务。</p>
+        <p>上传检测会真实保存图片并创建记录，但诊断结果仍由 `services/ai/inference.py` 生成。</p>
+    </article>
+    <article class="feature-card">
+        <span>未来扩展</span>
+        <h4>Future Integration</h4>
+        <p>已预留智能决策模型、病虫害识别模型、MQTT topic、Redis 状态缓存、InfluxDB 时序库、WebSocket / 轮询实时推送扩展点。</p>
+        <p>当前页面展示的是“可演示第一版”，不是实时在线控制系统。</p>
+    </article>
+</section>
+{% endblock %}

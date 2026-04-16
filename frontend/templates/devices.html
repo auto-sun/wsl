@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/devices.css">
+{% endblock %}
+
+{% block content %}
+<section class="devices-shell">
+    <section class="devices-hero devices-panel">
+        <div>
+            <p class="eyebrow">Device Management Center</p>
+            <h3>园区设备管理与扩展预留</h3>
+            <p>
+                当前页面仅展示 mock 设备状态、按钮占位动作与系统扩展约定。
+                当前未接真实硬件、未接真实 MQTT Broker、未建立真实在线控制系统。
+            </p>
+        </div>
+        <div id="boundaryNotice" class="boundary-card"></div>
+    </section>
+
+    <section id="deviceSummaryCards" class="device-summary-row"></section>
+
+    <div class="devices-grid">
+        <section class="devices-panel status-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Overview</p>
+                    <h4>设备总览统计</h4>
+                </div>
+                <span class="panel-chip">在线 / 离线</span>
+            </div>
+            <div id="deviceStatusOverview" class="status-overview-grid"></div>
+        </section>
+
+        <section class="devices-panel type-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Type Cards</p>
+                    <h4>设备状态卡片</h4>
+                </div>
+                <span class="panel-chip">设备类型标签</span>
+            </div>
+            <div id="deviceTypeCards" class="type-card-grid"></div>
+        </section>
+
+        <section class="devices-panel list-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Device Table</p>
+                    <h4>设备列表表格</h4>
+                </div>
+                <span class="panel-chip">最近心跳 / 电量 / 信号</span>
+            </div>
+            <div id="deviceTable" class="device-table-shell"></div>
+        </section>
+
+        <section class="devices-panel action-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Device Actions</p>
+                    <h4>连接测试 / 查看日志 / 下发命令</h4>
+                </div>
+                <span class="panel-chip">占位动作</span>
+            </div>
+            <div id="selectedDeviceInfo" class="action-info-card"></div>
+            <div id="actionResult" class="action-result-card"></div>
+            <div id="deviceLogs" class="device-logs"></div>
+        </section>
+
+        <section class="devices-panel extension-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Extensions</p>
+                    <h4>系统扩展预留说明</h4>
+                </div>
+                <span class="panel-chip">MQTT / Redis / 实时推送</span>
+            </div>
+            <div id="extensionCards" class="extension-list"></div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/api.js"></script>
+<script src="/static/js/devices.js"></script>
+{% endblock %}

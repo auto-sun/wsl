@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <title>登录 | {{ system_meta.NAME }}</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="login-page">
+    <div class="app-backdrop login-backdrop">
+        <span class="glow-orb orb-a"></span>
+        <span class="glow-orb orb-b"></span>
+        <span class="glow-orb orb-c"></span>
+        <div class="grid-overlay"></div>
+    </div>
+    <div class="login-shell">
+        <section class="login-info">
+            <span class="brand-tag">DragonFruit AI Farm</span>
+            <h1>{{ system_meta.NAME }}</h1>
+            <p>{{ system_meta.SUBTITLE }}</p>
+            <div class="brand-mini-row">
+                <span>火龙果元素</span>
+                <span>无人机巡检</span>
+                <span>智慧农业控制</span>
+            </div>
+            <div class="info-grid">
+                <article class="info-card">
+                    <h3>监测</h3>
+                    <p>长势监测、无人机航测数据、时序指标预留。</p>
+                </article>
+                <article class="info-card">
+                    <h3>诊断</h3>
+                    <p>病虫害图片检测流程与 AI 推理接口占位。</p>
+                </article>
+                <article class="info-card">
+                    <h3>决策</h3>
+                    <p>灌溉施肥策略、处方图与设备联控扩展骨架。</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="login-card">
+            <p class="eyebrow">系统登录</p>
+            <h2>进入平台</h2>
+            <p class="page-description">当前阶段提供基础登录校验占位，后续可切换为真实用户认证。</p>
+
+            {% if messages %}
+            <div class="app-alert app-alert-error">
+                {% for message in messages %}
+                <div>{{ message }}</div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" action="/login" class="login-form">
+                {% csrf_token %}
+                <label>
+                    <span>账号</span>
+                    <input type="text" name="username" value="{{ demo_account.username }}" autocomplete="username">
+                </label>
+                <label>
+                    <span>密码</span>
+                    <input type="password" name="password" value="{{ demo_account.password }}" autocomplete="current-password">
+                </label>
+                <button type="submit" class="btn-primary">进入系统</button>
+            </form>
+
+            <div class="note-panel">
+                <span>演示账号</span>
+                <p class="page-description">{{ demo_account.username }} / {{ demo_account.password }}</p>
+                <a href="/api/" class="inline-link">接口入口 /api/</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

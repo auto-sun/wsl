@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block content %}
+<section class="page-section">
+    <div id="growthKpis" class="summary-card-grid"></div>
+</section>
+
+<div class="content-grid content-grid-split">
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">长势热力</p>
+                <h3>地块分布与长势热区</h3>
+            </div>
+            <span class="panel-tag">Mapbox GL</span>
+        </div>
+        <div id="growthMap" class="map-canvas map-tall"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">监测曲线</p>
+                <h3>NDVI / 墒情 / 开花同步率</h3>
+            </div>
+            <span class="panel-tag">ECharts</span>
+        </div>
+        <div id="growthMetricsChart" class="chart-canvas chart-tall"></div>
+    </section>
+</div>
+
+<div class="content-grid content-grid-split">
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">地块诊断</p>
+                <h3>重点区块监测清单</h3>
+            </div>
+            <span class="panel-tag">分区视图</span>
+        </div>
+        <div id="blockInsightList" class="stack-list stack-list-dense"></div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <p class="eyebrow">AI 解读</p>
+                <h3>长势风险摘要</h3>
+            </div>
+            <span class="panel-tag">策略联动</span>
+        </div>
+        <div id="growthInsight" class="narrative-card"></div>
+    </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/growth.js' %}"></script>
+{% endblock %}

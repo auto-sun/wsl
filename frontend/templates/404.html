@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 | 火龙果智慧管控平台</title>
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body class="login-page">
+    <div class="app-backdrop login-backdrop">
+        <span class="glow-orb orb-a"></span>
+        <span class="glow-orb orb-b"></span>
+        <span class="glow-orb orb-c"></span>
+        <div class="grid-overlay"></div>
+    </div>
+    <div class="login-shell">
+        <section class="login-info">
+            <span class="brand-tag">404 Not Found</span>
+            <h1>页面不存在</h1>
+            <p>当前访问的地址未匹配到系统页面，可能尚未开放或输入路径有误。</p>
+        </section>
+        <section class="login-card">
+            <p class="eyebrow">路径信息</p>
+            <h2>{{ unknown_path }}</h2>
+            <p class="page-description">你可以返回登录页重新进入系统，或回到驾驶舱继续演示。</p>
+            <div class="info-grid">
+                <a href="/login" class="btn-primary">返回登录页</a>
+                <a href="/dashboard" class="btn-secondary">回到系统首页</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

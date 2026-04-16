@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="/static/css/diagnosis.css">
+{% endblock %}
+
+{% block content %}
+<section class="diagnosis-shell">
+    <section class="diagnosis-hero diagnosis-panel">
+        <div>
+            <p class="eyebrow">Agricultural AI Diagnosis</p>
+            <h3>火龙果病虫害图片检测</h3>
+            <p>
+                当前阶段完成图片上传、任务记录、mock 推理、结果展示与历史记录的完整业务流程。
+                模型推理暂未接真实服务，代码中已明确预留未来接入 PyTorch / ONNX / TensorFlow 模型的位置。
+            </p>
+        </div>
+        <div class="diagnosis-hero-tags">
+            <div class="hero-info-pill">
+                <span>推理模式</span>
+                <strong>Mock</strong>
+            </div>
+            <div class="hero-info-pill">
+                <span>流程状态</span>
+                <strong>可演示</strong>
+            </div>
+            <div class="hero-info-pill">
+                <span>接口</span>
+                <strong>/api/diagnosis/upload</strong>
+            </div>
+        </div>
+    </section>
+
+    <div class="diagnosis-grid">
+        <section class="diagnosis-panel upload-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Upload</p>
+                    <h4>图片上传区域</h4>
+                </div>
+                <span class="panel-chip">点击或拖拽上传</span>
+            </div>
+
+            <form id="diagnosisForm" class="diagnosis-form">
+                <label id="uploadDropzone" class="upload-dropzone" for="diagnosisImageInput">
+                    <input id="diagnosisImageInput" name="image" type="file" accept="image/*" hidden>
+                    <div class="dropzone-inner">
+                        <strong>点击上传或拖拽火龙果病虫害图片到此处</strong>
+                        <p>支持 JPG / PNG / JPEG，用于模拟 AI 病虫害诊断流程</p>
+                    </div>
+                </label>
+
+                <div class="preview-header">
+                    <div>
+                        <span class="preview-label">图片预览区域</span>
+                        <strong id="selectedImageName">尚未选择图片</strong>
+                    </div>
+                    <button id="startDiagnosisButton" type="submit" class="btn-neon-alt" disabled>开始检测</button>
+                </div>
+
+                <div class="preview-stage">
+                    <div class="preview-canvas">
+                        <img id="previewImage" alt="病虫害预览图">
+                        <div id="overlayLayer" class="overlay-layer"></div>
+                    </div>
+                    <div class="upload-guidance">
+                        <div class="guidance-item">
+                            <span>上传建议</span>
+                            <p>尽量选择清晰近景图，突出茎部、果面或叶面异常区域。</p>
+                        </div>
+                        <div class="guidance-item">
+                            <span>未来扩展</span>
+                            <p>后续可在此接入多图批量上传、无人机航测样本导入与模型版本选择。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="diagnosisProgress" class="progress-shell is-hidden">
+                    <div class="progress-head">
+                        <strong>AI识别中</strong>
+                        <span id="diagnosisProgressText">正在上传图片并调用 mock 推理服务...</span>
+                    </div>
+                    <div class="progress-track">
+                        <div id="diagnosisProgressBar" class="progress-bar"></div>
+                    </div>
+                </div>
+            </form>
+        </section>
+
+        <section class="diagnosis-panel result-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Result</p>
+                    <h4>检测结果卡片</h4>
+                </div>
+                <span id="riskBadge" class="risk-badge risk-neutral">待检测</span>
+            </div>
+            <div id="diagnosisResultCard" class="result-card-shell">
+                <div class="result-placeholder">
+                    <h5>等待开始检测</h5>
+                    <p>上传图片后点击“开始检测”，系统会保存图片、创建任务记录并返回 mock 推理结果。</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="diagnosis-grid diagnosis-grid-bottom">
+        <section class="diagnosis-panel history-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">History</p>
+                    <h4>历史检测记录列表</h4>
+                </div>
+                <span class="panel-chip">最近 10 条</span>
+            </div>
+            <div id="diagnosisHistoryList" class="history-list"></div>
+        </section>
+
+        <section class="diagnosis-panel knowledge-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Knowledge Base</p>
+                    <h4>常见病虫害说明区</h4>
+                </div>
+                <span class="panel-chip">静态知识</span>
+            </div>
+            <div class="knowledge-list">
+                <article class="knowledge-item">
+                    <h5>茎腐病</h5>
+                    <p>常见于高湿环境，茎部出现软腐、变褐或塌陷，建议及时隔离与局部防治。</p>
+                </article>
+                <article class="knowledge-item">
+                    <h5>炭疽病</h5>
+                    <p>果面或茎节可能出现褐色病斑，适宜在高温高湿环境传播，需加强通风和病斑复核。</p>
+                </article>
+                <article class="knowledge-item">
+                    <h5>红蜘蛛虫害</h5>
+                    <p>多集中在叶背与嫩梢区域，易造成叶片失绿和长势衰弱，建议精准监测虫口密度。</p>
+                </article>
+                <article class="knowledge-item">
+                    <h5>AI 模型接入说明</h5>
+                    <p>当前结果来自 mock 推理，未来将在 `services/ai/inference.py` 中切换为真实深度学习模型。</p>
+                </article>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/api.js"></script>
+<script src="/static/js/diagnosis.js"></script>
+{% endblock %}

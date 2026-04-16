@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
+<link rel="stylesheet" href="/static/css/decision.css">
+{% endblock %}
+
+{% block content %}
+<section class="decision-shell">
+    <section class="decision-hero decision-panel">
+        <div>
+            <p class="eyebrow">Prescription Strategy Center</p>
+            <h3>火龙果处方图与水肥一体化策略</h3>
+            <p>
+                当前阶段聚焦策略展示、生成与下发预留，不连接真实控制系统。
+                页面已为智能决策模型、水肥控制器、自动灌溉执行单元和 MQTT 指令下发保留接入位置。
+            </p>
+        </div>
+        <div class="decision-action-bar">
+            <div class="decision-filter-box">
+                <label for="decisionBlockSelect">地块选择</label>
+                <select id="decisionBlockSelect"></select>
+            </div>
+            <div class="decision-buttons">
+                <button id="generatePlanButton" type="button" class="btn-neon-alt">生成新策略</button>
+                <button id="dispatchPlanButton" type="button" class="btn-outline-soft">下发策略</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="decision-grid">
+        <section class="decision-panel summary-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Plan Summary</p>
+                    <h4>长势 / 风险摘要</h4>
+                </div>
+                <span id="planStatusTag" class="panel-chip">待下发</span>
+            </div>
+            <div id="decisionSummary" class="decision-summary-body"></div>
+        </section>
+
+        <section class="decision-panel metric-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Suggested Inputs</p>
+                    <h4>建议灌溉量 / 施肥量 / 时段</h4>
+                </div>
+                <span id="planGradeTag" class="grade-badge grade-neutral">-</span>
+            </div>
+            <div id="planMetrics" class="plan-metric-grid"></div>
+        </section>
+
+        <section class="decision-panel chart-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Grade Distribution</p>
+                    <h4>处方等级分布图</h4>
+                </div>
+                <span class="panel-chip">ECharts</span>
+            </div>
+            <div id="gradeDistributionChart" class="decision-chart"></div>
+        </section>
+
+        <section class="decision-panel map-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Prescription Map</p>
+                    <h4>处方地图展示区</h4>
+                </div>
+                <span class="panel-chip">Mapbox GL</span>
+            </div>
+            <div id="decisionMap" class="decision-map"></div>
+        </section>
+
+        <section class="decision-panel history-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">History</p>
+                    <h4>历史策略记录表</h4>
+                </div>
+                <span class="panel-chip">最近记录</span>
+            </div>
+            <div id="decisionHistoryTable" class="history-table-shell"></div>
+        </section>
+
+        <section class="decision-panel future-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Future Integration</p>
+                    <h4>执行预留与系统对接</h4>
+                </div>
+                <span class="panel-chip">控制链路</span>
+            </div>
+            <div id="dispatchPlaceholder" class="placeholder-block"></div>
+            <div id="futureExtensions" class="future-list"></div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="/static/js/decision.js"></script>
+{% endblock %}

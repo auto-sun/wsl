@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
+<link rel="stylesheet" href="/static/css/dashboard.css">
+{% endblock %}
+
+{% block content %}
+<section class="dashboard-shell">
+    <div class="dashboard-title-panel tech-panel">
+        <div class="title-copy">
+            <p class="eyebrow">智慧农业监控驾驶舱</p>
+            <h3 id="dashboardSystemTitle">基于AI+无人机的火龙果长势监测与精准水肥一体化系统</h3>
+            <p id="dashboardSystemSubtitle" class="dashboard-copy">
+                融合无人机巡检、病虫害识别、长势评估与水肥策略控制的智慧农业监控驾驶舱
+            </p>
+        </div>
+        <div class="drone-status-card">
+            <div class="drone-radar">
+                <div class="drone-ring ring-1"></div>
+                <div class="drone-ring ring-2"></div>
+                <div class="drone-ring ring-3"></div>
+                <div class="drone-icon">
+                    <span></span>
+                </div>
+            </div>
+            <div class="drone-status-meta">
+                <span class="micro-label">无人机巡航状态</span>
+                <strong id="droneMissionName">无人机晨间全园巡航</strong>
+                <p id="droneMissionRoute">A区 -> B区 -> C区</p>
+                <div class="progress-track">
+                    <div id="droneMissionProgress" class="progress-bar"></div>
+                </div>
+                <small id="droneMissionMessage">当前执行热区复飞与长势复核任务</small>
+            </div>
+        </div>
+    </div>
+
+    <section id="overviewCards" class="overview-card-row"></section>
+
+    <div class="dashboard-grid">
+        <section class="tech-panel chart-panel growth-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Growth Trend</p>
+                    <h4>火龙果长势趋势图</h4>
+                </div>
+                <span class="panel-chip">ECharts</span>
+            </div>
+            <div id="growthTrendChart" class="dashboard-chart"></div>
+        </section>
+
+        <section class="tech-panel chart-panel diagnosis-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Diagnosis Stats</p>
+                    <h4>病虫害检测统计图</h4>
+                </div>
+                <span class="panel-chip">ECharts</span>
+            </div>
+            <div id="diagnosisStatsChart" class="dashboard-chart"></div>
+        </section>
+
+        <section class="tech-panel camera-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Camera Center</p>
+                    <h4>中控实时摄像头画面</h4>
+                </div>
+                <span id="cameraStatusBadge" class="panel-chip panel-chip-danger">待开启</span>
+            </div>
+            <div class="camera-console">
+                <div class="camera-frame">
+                    <video id="cameraVideo" autoplay muted playsinline></video>
+                    <canvas id="cameraFreezeFrame" class="camera-freeze-frame" hidden aria-hidden="true"></canvas>
+                    <div class="camera-hud">
+                        <span>实时视频流</span>
+                        <small id="cameraMessage">点击下方按钮启用浏览器摄像头</small>
+                    </div>
+                    <div class="camera-scanline"></div>
+                </div>
+                <div class="camera-actions">
+                    <button id="startCameraButton" type="button" class="btn-neon">开启摄像头</button>
+                    <button id="pauseCameraButton" type="button" class="btn-ghost btn-camera-pause" disabled aria-pressed="false">暂停画面</button>
+                    <button id="stopCameraButton" type="button" class="btn-ghost" disabled>关闭摄像头</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="tech-panel chart-panel strategy-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Water & Fertilizer</p>
+                    <h4>水肥策略执行概览</h4>
+                </div>
+                <span class="panel-chip">ECharts</span>
+            </div>
+            <div id="strategyOverviewChart" class="dashboard-chart"></div>
+        </section>
+
+        <section class="tech-panel map-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Orchard Map</p>
+                    <h4>地块分布与热力图区域</h4>
+                </div>
+                <span class="panel-chip">Mapbox GL</span>
+            </div>
+            <div id="orchardMap" class="map-area"></div>
+        </section>
+
+        <section class="tech-panel alert-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Recent Alerts</p>
+                    <h4>最近告警列表</h4>
+                </div>
+                <span class="panel-chip panel-chip-danger">实时关注</span>
+            </div>
+            <div id="recentAlerts" class="alert-list"></div>
+        </section>
+
+        <section class="tech-panel quick-panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Quick Access</p>
+                    <h4>快捷入口按钮</h4>
+                </div>
+                <span class="panel-chip">Navigation</span>
+            </div>
+            <div id="quickLinks" class="quick-link-grid"></div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="/static/js/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

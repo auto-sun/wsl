@@ -145,7 +145,13 @@ MQTT_CONFIG = {
 AI_SERVICE_CONFIG = {
     "BASE_URL": os.getenv("AI_SERVICE_BASE_URL", "http://127.0.0.1:9000"),
     "TIMEOUT": int(os.getenv("AI_SERVICE_TIMEOUT", "8")),
-    "TODO": "当前仅保留病虫害检测模型接口占位，后续接入真实推理服务。",
+    "MODEL_PATH": os.getenv("AI_MODEL_PATH", str(ROOT_DIR / "models" / "dragonfruit_disease_yolov8s.pt")),
+    "CONFIDENCE_THRESHOLD": float(os.getenv("AI_MODEL_CONFIDENCE_THRESHOLD", "0.25")),
+    "IOU_THRESHOLD": float(os.getenv("AI_MODEL_IOU_THRESHOLD", "0.45")),
+    "IMAGE_SIZE": int(os.getenv("AI_MODEL_IMAGE_SIZE", "640")),
+    "DEVICE": os.getenv("AI_MODEL_DEVICE", "cpu"),
+    "FALLBACK_TO_MOCK": os.getenv("AI_MODEL_FALLBACK_TO_MOCK", "true").lower() == "true",
+    "TODO": "病虫害检测优先读取本地 YOLOv8 权重；未放置模型或推理异常时可按配置回退 mock。",
 }
 
 SYSTEM_META = {

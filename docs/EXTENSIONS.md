@@ -2,9 +2,12 @@
 
 ## 真实模型接入
 
-- 病虫害识别模型接入点：`backend/services/ai/inference.py -> run_diagnosis`
+- 病虫害识别模型入口：`backend/services/ai/inference.py -> run_diagnosis`
+- 默认权重路径：`models/dragonfruit_disease_yolov8s.pt`
+- 默认推理框架：`ultralytics` YOLOv8
+- 可通过 `.env` 调整 `AI_MODEL_PATH`、`AI_MODEL_DEVICE`、`AI_MODEL_CONFIDENCE_THRESHOLD`、`AI_MODEL_IOU_THRESHOLD`
 - 智能决策模型接入点：`backend/services/ai/inference.py -> generate_decision_strategy`
-- 可扩展为 PyTorch、ONNX Runtime、TensorFlow Serving 或独立推理服务
+- 后续仍可扩展为 ONNX Runtime、TensorFlow Serving 或独立推理服务
 
 ## 真实设备接入
 

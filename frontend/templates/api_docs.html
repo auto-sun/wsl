@@ -5,7 +5,7 @@
     <div>
         <p class="eyebrow">API Overview</p>
         <h3>项目接口简要文档</h3>
-        <p>当前阶段所有接口均基于 mock 数据或占位逻辑实现，已明确区分演示链路与未来真实模型、真实设备、真实时序数据的接入边界。</p>
+        <p>当前阶段大多数业务数据基于 mock 或占位逻辑实现；病虫害检测已支持本地 YOLOv8 权重，未放置模型时回退 mock。</p>
     </div>
     <div class="brand-mini-row">
         <a href="/api/" class="btn-secondary">打开 API 根入口</a>
@@ -47,7 +47,7 @@
         <h4>Diagnosis</h4>
         <p><code>POST /api/diagnosis/upload</code></p>
         <p><code>GET /api/diagnosis/history</code></p>
-        <p>保存上传图片并返回 mock 推理结果，结构已与未来 PyTorch / ONNX / TensorFlow 模型接入兼容。</p>
+        <p>保存上传图片并返回 YOLOv8 或 mock 兜底推理结果，标注框会按图片尺寸映射到预览区域。</p>
     </article>
     <article class="feature-card">
         <span>处方策略</span>
@@ -79,8 +79,8 @@
     <article class="feature-card">
         <span>Mock 数据说明</span>
         <h4>Current Mock Boundary</h4>
-        <p>当前图表、地图、设备状态、策略结果、病虫害推理结果均来自后端 mock 数据与占位服务。</p>
-        <p>上传检测会真实保存图片并创建记录，但诊断结果仍由 `services/ai/inference.py` 生成。</p>
+        <p>当前图表、地图、设备状态、策略结果仍主要来自后端 mock 数据与占位服务。</p>
+        <p>上传检测会真实保存图片并创建记录；如存在 `models/dragonfruit_disease_yolov8s.pt`，诊断结果来自 YOLOv8。</p>
     </article>
     <article class="feature-card">
         <span>未来扩展</span>

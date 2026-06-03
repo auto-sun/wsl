@@ -25,10 +25,11 @@ function createDecisionGradeOption(distribution) {
 }
 
 async function initDecisionPage() {
-    const { escapeHtml, renderState, renderErrorState, setButtonLoading, setSelectOptions } = window.pageUtils;
+    const { escapeHtml, renderState, renderErrorState, setButtonLoading } = window.pageUtils;
     const { setChartOption } = window.chartUtils;
 
-    const blockSelect = document.getElementById("decisionBlockSelect");
+    const blockSelectButton = document.getElementById("decisionBlockSelectButton");
+    const blockSelectMenu = document.getElementById("decisionBlockSelectMenu");
     const generateButton = document.getElementById("generatePlanButton");
     const dispatchButton = document.getElementById("dispatchPlanButton");
     const summaryNode = document.getElementById("decisionSummary");
@@ -44,6 +45,7 @@ async function initDecisionPage() {
     let selectedBlock = "";
     let decisionMap = null;
     let decisionPopup = null;
+    let blockOptions = [];
 
     function getActivePlan() {
         if (!plansPayload || !plansPayload.plans.length) {
@@ -53,14 +55,51 @@ async function initDecisionPage() {
     }
 
     function updateBlockOptions(blocks) {
-        setSelectOptions(
-            blockSelect,
-            blocks.map((item) => ({
-                value: item.code,
-                label: `${item.code} · ${item.name}`,
-            })),
-            selectedBlock,
-        );
+        blockOptions = blocks.map((item) => ({
+            value: item.code,
+            label: `${item.code} · ${item.name}`,
+        }));
+        renderBlockDropdown();
+    }
+
+    function getSelectedBlockLabel() {
+        const selectedOption = blockOptions.find((item) => item.value === selectedBlock);
+        return selectedOption ? selectedOption.label : "请选择地块";
+    }
+
+    function closeBlockDropdown() {
+        blockSelectMenu?.classList.remove("is-open");
+        blockSelectButton?.setAttribute("aria-expanded", "false");
+    }
+
+    function toggleBlockDropdown() {
+        const isOpen = blockSelectMenu?.classList.contains("is-open");
+        blockSelectMenu?.classList.toggle("is-open", !isOpen);
+        blockSelectButton?.setAttribute("aria-expanded", String(!isOpen));
+    }
+
+    function setSelectedBlock(value) {
+        selectedBlock = value;
+        renderBlockDropdown();
+        render();
+    }
+
+    function renderBlockDropdown() {
+        if (!blockSelectButton || !blockSelectMenu) {
+            return;
+        }
+        blockSelectButton.textContent = getSelectedBlockLabel();
+        blockSelectMenu.innerHTML = blockOptions.map((item) => `
+            <button
+                type="button"
+                class="decision-select-option ${item.value === selectedBlock ? "is-active" : ""}"
+                data-value="${escapeHtml(item.value)}"
+                role="option"
+                aria-selected="${item.value === selectedBlock ? "true" : "false"}"
+            >
+                ${escapeHtml(item.label)}
+            </button>
+        `).join("");
     }
 
     function setStatusTag(status) {
@@ -329,9 +368,27 @@ async function initDecisionPage() {
         window.appUI?.setLoading(false);
     }
 
-    blockSelect.addEventListener("change", () => {
-        selectedBlock = blockSelect.value;
-        render();
+    blockSelectButton?.addEventListener("click", toggleBlockDropdown);
+
+    blockSelectMenu?.addEventListener("click", (event) => {
+        const optionButton = event.target.closest(".decision-select-option");
+        if (!optionButton) {
+            return;
+        }
+        setSelectedBlock(optionButton.dataset.value);
+        closeBlockDropdown();
+    });
+
+    document.addEventListener("click", (event) => {
+        if (!event.target.closest(".decision-select-wrap")) {
+            closeBlockDropdown();
+        }
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeBlockDropdown();
+        }
     });
 
     generateButton.addEventListener("click", async () => {

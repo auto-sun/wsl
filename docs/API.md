@@ -5,7 +5,7 @@
 - 基础返回结构：`{"code": 0, "message": "ok", "data": {...}}`
 - 当前阶段 API 默认开放，便于前端联调与演示
 - HTML 页面采用基础登录占位，演示账号为 `admin / 123456`
-- 所有接口均为 mock 数据或占位逻辑，已为未来真实接入保留结构
+- 业务数据大多为 mock 或占位逻辑；病虫害检测会优先调用本地 YOLOv8 权重，未放置模型时回退 mock
 
 ## 页面路由
 
@@ -38,7 +38,7 @@
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
-| POST | `/api/diagnosis/upload` | 上传病虫害图片，保存图片并返回 mock 推理结果 |
+| POST | `/api/diagnosis/upload` | 上传病虫害图片，保存图片并返回 YOLOv8 或 mock 兜底推理结果 |
 | GET | `/api/diagnosis/history` | 查询最近历史检测记录 |
 
 ### 诊断返回要点
@@ -50,6 +50,8 @@
 - `suggestions`
 - `overlay_boxes`
 - `inference_mode`
+- `image_size`
+- `detected_count`
 
 ## 处方策略
 
@@ -71,7 +73,7 @@
 
 ## 说明
 
-- `services/ai/inference.py` 是 AI 推理统一入口，当前返回 mock 数据
+- `services/ai/inference.py` 是 AI 推理统一入口，默认读取 `models/dragonfruit_disease_yolov8s.pt`
 - `services/mqtt/client.py` 与 `services/mqtt/topics.py` 预留 MQTT 下发与 topic 约定
 - `services/cache/device_status.py` 预留 Redis 实时状态缓存逻辑
 - `services/tsdb/influx_client.py` 预留 InfluxDB 时序数据接入

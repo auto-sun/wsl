@@ -22,7 +22,9 @@
 
 - 上传图片会真实写入 `media/diagnosis/`
 - 会真实创建检测任务记录
-- 推理结果由 `backend/services/ai/inference.py` 生成，当前 `inference_mode = "mock"`
+- 推理结果由 `backend/services/ai/inference.py` 生成
+- 如果 `models/dragonfruit_disease_yolov8s.pt` 存在并已安装 `ultralytics`，返回 `inference_mode = "yolov8"`
+- 如果权重缺失、依赖缺失或推理异常，默认返回 `inference_mode = "mock"` 兜底结果
 
 ### Decision
 

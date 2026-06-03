@@ -11,14 +11,14 @@
             <p class="eyebrow">Agricultural AI Diagnosis</p>
             <h3>火龙果病虫害图片检测</h3>
             <p>
-                当前阶段完成图片上传、任务记录、mock 推理、结果展示与历史记录的完整业务流程。
-                模型推理暂未接真实服务，代码中已明确预留未来接入 PyTorch / ONNX / TensorFlow 模型的位置。
+                当前流程已接入本地 YOLOv8 权重读取逻辑，完成图片上传、模型识别、结果展示与历史记录。
+                未放置模型时会自动使用 mock 兜底，保证演示流程可继续运行。
             </p>
         </div>
         <div class="diagnosis-hero-tags">
             <div class="hero-info-pill">
                 <span>推理模式</span>
-                <strong>Mock</strong>
+                <strong>YOLOv8 / Mock</strong>
             </div>
             <div class="hero-info-pill">
                 <span>流程状态</span>
@@ -46,7 +46,7 @@
                     <input id="diagnosisImageInput" name="image" type="file" accept="image/*" hidden>
                     <div class="dropzone-inner">
                         <strong>点击上传或拖拽火龙果病虫害图片到此处</strong>
-                        <p>支持 JPG / PNG / JPEG，用于模拟 AI 病虫害诊断流程</p>
+                        <p>支持 JPG / PNG / JPEG，用于火龙果病虫害识别</p>
                     </div>
                 </label>
 
@@ -78,7 +78,7 @@
                 <div id="diagnosisProgress" class="progress-shell is-hidden">
                     <div class="progress-head">
                         <strong>AI识别中</strong>
-                        <span id="diagnosisProgressText">正在上传图片并调用 mock 推理服务...</span>
+                        <span id="diagnosisProgressText">正在上传图片并调用病虫害识别流程...</span>
                     </div>
                     <div class="progress-track">
                         <div id="diagnosisProgressBar" class="progress-bar"></div>
@@ -98,7 +98,7 @@
             <div id="diagnosisResultCard" class="result-card-shell">
                 <div class="result-placeholder">
                     <h5>等待开始检测</h5>
-                    <p>上传图片后点击“开始检测”，系统会保存图片、创建任务记录并返回 mock 推理结果。</p>
+                    <p>上传图片后点击“开始检测”，系统会保存图片、创建任务记录并返回识别结果。</p>
                 </div>
             </div>
         </section>
@@ -139,7 +139,7 @@
                 </article>
                 <article class="knowledge-item">
                     <h5>AI 模型接入说明</h5>
-                    <p>当前结果来自 mock 推理，未来将在 `services/ai/inference.py` 中切换为真实深度学习模型。</p>
+                    <p>将训练好的权重放到 `models/dragonfruit_disease_yolov8s.pt` 后，后端会优先调用 YOLOv8 推理。</p>
                 </article>
             </div>
         </section>

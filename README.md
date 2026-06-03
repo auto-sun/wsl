@@ -14,7 +14,7 @@
 
 当前阶段明确边界：
 
-- 不接真实病虫害模型
+- 病虫害检测已接入本地 YOLOv8 权重加载逻辑，未放置权重时使用 mock 兜底
 - 不接真实无人机航测链路
 - 不接真实传感器
 - 不接真实灌溉控制器
@@ -73,7 +73,7 @@
 - 拖拽上传
 - 图片预览
 - 检测进度反馈
-- mock 推理结果展示
+- YOLOv8 / mock 兜底推理结果展示
 - 风险等级标签
 - 标注框 overlay
 - 历史检测记录
@@ -153,6 +153,8 @@ competition/
 │   ├── MOCK_DATA.md
 │   └── EXTENSIONS.md
 ├── media/
+├── models/
+│   └── README.md
 ├── .env.example
 └── requirements.txt
 ```
@@ -177,20 +179,41 @@ cd backend
 python manage.py migrate
 ```
 
-### 4. 启动开发服务
+### 4. 可选：放置病虫害识别模型
+
+如果已经训练好 YOLOv8 权重，将 `.pt` 放到：
+
+```text
+models/dragonfruit_disease_yolov8s.pt
+```
+
+默认配置来自 `.env.example`：
+
+```text
+AI_MODEL_PATH=/home/autosun/code/competition/models/dragonfruit_disease_yolov8s.pt
+AI_MODEL_DEVICE=cpu
+AI_MODEL_CONFIDENCE_THRESHOLD=0.25
+AI_MODEL_IOU_THRESHOLD=0.45
+AI_MODEL_IMAGE_SIZE=640
+AI_MODEL_FALLBACK_TO_MOCK=true
+```
+
+没有放置模型时，病虫害检测接口会自动回退 mock 结果。
+
+### 5. 启动开发服务
 
 ```bash
 python manage.py runserver
 ```
 
-### 5. 打开浏览器
+### 6. 打开浏览器
 
 - 登录页：`http://127.0.0.1:8000/login`
 - 系统首页：`http://127.0.0.1:8000/dashboard`
 - API 根入口：`http://127.0.0.1:8000/api/`
 - API 文档页：`http://127.0.0.1:8000/api-docs`
 
-### 6. 演示账号
+### 7. 演示账号
 
 - 账号：`admin`
 - 密码：`123456`
@@ -232,12 +255,13 @@ python manage.py runserver
 - Django 页面路由与 API 路由
 - 登录会话占位
 - 图片上传保存
+- 病虫害 YOLOv8 本地权重推理入口
 - 检测记录 / 策略记录数据库写入
 - 浏览器摄像头 `getUserMedia`
 
 ### 当前仍为 mock / 占位的部分
 
-- 病虫害 AI 推理结果
+- 病虫害 AI 推理在未放置 `.pt` 或推理失败时使用 mock 兜底
 - 长势监测业务数据
 - 无人机巡检业务数据
 - 处方策略生成
@@ -257,7 +281,8 @@ python manage.py runserver
 ### 真实模型接入
 
 - `backend/services/ai/inference.py`
-- 可替换为 PyTorch / ONNX Runtime / TensorFlow 模型推理
+- 默认读取 `models/dragonfruit_disease_yolov8s.pt`
+- 当前已支持通过 ultralytics 调用 YOLOv8 `.pt` 权重
 
 ### 真实设备接入
 

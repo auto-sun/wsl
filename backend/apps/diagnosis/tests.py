@@ -23,12 +23,13 @@ class DiagnosisSmokeTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["code"], 0)
 
-    def test_upload_api_returns_mock_result(self):
+    def test_upload_api_returns_detection_result(self):
         upload = SimpleUploadedFile("dragonfruit-test.jpg", b"fake-image-bytes", content_type="image/jpeg")
         response = self.client.post("/api/diagnosis/upload", {"image": upload})
         self.assertEqual(response.status_code, 200)
         payload = response.json()["data"]
         self.assertEqual(payload["status"], "success")
+        self.assertIn("inference_mode", payload)
         self.assertIn("/media/diagnosis/", payload["image_url"])
         self.assertIn("result", payload)
         self.assertIn("disease_name", payload["result"])
@@ -36,6 +37,8 @@ class DiagnosisSmokeTests(TestCase):
         self.assertIn("risk_level", payload["result"])
         self.assertIn("suggestion", payload["result"])
         self.assertIn("boxes", payload["result"])
+        self.assertIn("image_size", payload["result"])
+        self.assertIn("detected_count", payload["result"])
         self.assertIn("width", payload["result"]["boxes"][0])
         self.assertIn("height", payload["result"]["boxes"][0])
         self.assertIn("score", payload["result"]["boxes"][0])

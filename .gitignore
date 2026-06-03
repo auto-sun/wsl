@@ -1,2 +1,8 @@
 media/
 .codex
+__pycache__/
+*.pyc
+models/*.pt
+models/*.onnx
+models/*.engine
+yolov8s_training_template/runs/

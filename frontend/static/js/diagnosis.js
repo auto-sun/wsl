@@ -14,7 +14,7 @@ async function initDiagnosisPage() {
     const resultCard = document.getElementById("diagnosisResultCard");
     const historyList = document.getElementById("diagnosisHistoryList");
     const riskBadge = document.getElementById("riskBadge");
-    const mockBoxReference = { width: 640, height: 360 };
+    const fallbackBoxReference = { width: 640, height: 360 };
 
     let previewUrl = "";
     let progressTimer = null;
@@ -40,11 +40,18 @@ async function initDiagnosisPage() {
         riskBadge.textContent = level || "待检测";
     }
 
-    function renderOverlayBoxes(boxes) {
-        const scaleX = (overlayLayer.clientWidth || mockBoxReference.width) / mockBoxReference.width;
-        const scaleY = (overlayLayer.clientHeight || mockBoxReference.height) / mockBoxReference.height;
+    function renderOverlayBoxes(boxes, imageSize = fallbackBoxReference) {
+        const referenceWidth = Number(imageSize.width) || fallbackBoxReference.width;
+        const referenceHeight = Number(imageSize.height) || fallbackBoxReference.height;
+        const canvasWidth = overlayLayer.clientWidth || referenceWidth;
+        const canvasHeight = overlayLayer.clientHeight || referenceHeight;
+        const scale = Math.min(canvasWidth / referenceWidth, canvasHeight / referenceHeight);
+        const renderedWidth = referenceWidth * scale;
+        const renderedHeight = referenceHeight * scale;
+        const offsetX = (canvasWidth - renderedWidth) / 2;
+        const offsetY = (canvasHeight - renderedHeight) / 2;
         overlayLayer.innerHTML = (boxes || []).map((box) => `
-            <div class="overlay-box" style="left:${box.x * scaleX}px;top:${box.y * scaleY}px;width:${box.width * scaleX}px;height:${box.height * scaleY}px;">
+            <div class="overlay-box" style="left:${offsetX + box.x * scale}px;top:${offsetY + box.y * scale}px;width:${box.width * scale}px;height:${box.height * scale}px;">
                 <span>${escapeHtml(box.label)} ${escapeHtml((box.score * 100).toFixed(1))}%</span>
             </div>
         `).join("");
@@ -73,7 +80,7 @@ async function initDiagnosisPage() {
         progressBar.style.width = "8%";
         const steps = [
             "正在上传图片并创建检测任务...",
-            "AI识别中，执行 mock 特征提取与推理占位流程...",
+            "AI识别中，优先调用本地 YOLOv8 模型...",
             "正在组装结构化诊断结果...",
         ];
         let index = 0;
@@ -99,7 +106,7 @@ async function initDiagnosisPage() {
 
     function renderResult(data) {
         setRiskBadge(data.result.risk_level);
-        renderOverlayBoxes(data.result.boxes);
+        renderOverlayBoxes(data.result.boxes, data.result.image_size);
         resultCard.innerHTML = `
             <div class="result-grid">
                 <div class="result-header">
@@ -123,6 +130,14 @@ async function initDiagnosisPage() {
                     <div class="meta-item">
                         <span>任务状态</span>
                         <strong>${escapeHtml(data.status)}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>推理模式</span>
+                        <strong>${escapeHtml(data.inference_mode || "unknown")}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>检出目标</span>
+                        <strong>${escapeHtml(data.result.detected_count || 0)} 个</strong>
                     </div>
                 </div>
                 <div class="result-message">
@@ -208,7 +223,7 @@ async function initDiagnosisPage() {
         resultCard.innerHTML = `
             <div class="result-placeholder">
                 <h5>AI识别中</h5>
-                <p>正在保存图片并调用后端 mock 推理流程，请稍候。</p>
+                <p>正在保存图片并调用后端病虫害识别流程，请稍候。</p>
             </div>
         `;
 
@@ -220,7 +235,7 @@ async function initDiagnosisPage() {
             stopProgress(true);
             renderResult(result);
             await refreshHistory();
-            window.appUI?.notify("检测任务已完成，当前结果来自 mock 推理服务。", "success", "AI 诊断完成");
+            window.appUI?.notify("检测任务已完成，结果已写入历史记录。", "success", "AI 诊断完成");
         } catch (error) {
             stopProgress(false);
             setRiskBadge("失败");

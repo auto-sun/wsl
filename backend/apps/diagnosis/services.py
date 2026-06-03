@@ -15,12 +15,12 @@ class DiagnosisService:
     病虫害诊断服务。
 
     当前阶段：
-    - 负责上传图片保存、mock 推理调用、诊断记录创建、历史记录查询
-    - 统一封装诊断流程，避免将 mock 逻辑直接堆在 API view 中
+    - 负责上传图片保存、YOLOv8/mock 推理调用、诊断记录创建、历史记录查询
+    - 统一封装诊断流程，避免将模型调用逻辑直接堆在 API view 中
 
     未来阶段：
     - 可在这里切换为异步任务编排
-    - 可接入真实模型推理、任务队列、模型版本管理、批量检测
+    - 可接入任务队列、模型版本管理、批量检测
     """
 
     def __init__(self, inference_service=None):
@@ -29,11 +29,8 @@ class DiagnosisService:
     def create_diagnosis_task(self, upload_file, request):
         stored_path = self._store_upload_file(upload_file)
 
-        # 当前 mock 流程：
-        # - 文件保存成功后直接调用统一推理服务返回 mock 结果
-        # 未来真实接入点：
-        # - 在 inference_service 中切换为真实模型推理
-        # - 或改为创建异步任务并返回任务编号与轮询状态
+        # 文件保存成功后调用统一推理服务；推理服务会优先使用 YOLOv8 权重，
+        # 权重缺失或推理异常时默认回退 mock，保证演示流程可用。
         inference_result = self.inference_service.run_diagnosis(
             file_name=upload_file.name,
             file_path=default_storage.path(stored_path),
@@ -60,6 +57,8 @@ class DiagnosisService:
             "status": inference_result["status"],
             "result": inference_result["result"],
             "message": inference_result["message"],
+            "inference_mode": inference_result["inference_mode"],
+            "model_hint": inference_result.get("model_hint", ""),
         }
 
     def get_history_payload(self, limit=10):

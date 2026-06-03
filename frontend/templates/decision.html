@@ -2,7 +2,7 @@
 
 {% block extra_head %}
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css">
-<link rel="stylesheet" href="/static/css/decision.css">
+<link rel="stylesheet" href="/static/css/decision.css?v=20260603-custom-select">
 {% endblock %}
 
 {% block content %}
@@ -18,8 +18,19 @@
         </div>
         <div class="decision-action-bar">
             <div class="decision-filter-box">
-                <label for="decisionBlockSelect">地块选择</label>
-                <select id="decisionBlockSelect"></select>
+                <label for="decisionBlockSelectButton">地块选择</label>
+                <div class="decision-select-wrap">
+                    <button
+                        id="decisionBlockSelectButton"
+                        type="button"
+                        class="decision-select-trigger"
+                        aria-haspopup="listbox"
+                        aria-expanded="false"
+                    >
+                        请选择地块
+                    </button>
+                    <div id="decisionBlockSelectMenu" class="decision-select-menu" role="listbox"></div>
+                </div>
             </div>
             <div class="decision-buttons">
                 <button id="generatePlanButton" type="button" class="btn-neon-alt">生成新策略</button>
@@ -103,5 +114,5 @@
 <script src="/static/js/api.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
-<script src="/static/js/decision.js"></script>
+<script src="/static/js/decision.js?v=20260603-custom-select"></script>
 {% endblock %}

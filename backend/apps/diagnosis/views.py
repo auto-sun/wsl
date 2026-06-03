@@ -8,6 +8,6 @@ def diagnosis_view(request):
         {
             "page_title": "病虫害检测",
             "page_key": "diagnosis",
-            "page_description": "上传病虫害图片、执行 mock AI 诊断、查看结果与历史记录。",
+            "page_description": "上传病虫害图片、执行 YOLOv8/兜底诊断、查看结果与历史记录。",
         },
     )

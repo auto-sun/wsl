@@ -1,17 +1,22 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 
 class SkeletonSmokeTests(TestCase):
     def setUp(self):
         self.client = Client()
+        User.objects.create_user(
+            username="test_user",
+            password="123456",
+            first_name="测试用户",
+        )
 
-    def login_demo_user(self):
+    def login_test_user(self):
         return self.client.post(
             "/login",
             {
-                "username": settings.DEMO_ACCOUNT["username"],
-                "password": settings.DEMO_ACCOUNT["password"],
+                "username": "test_user",
+                "password": "123456",
             },
         )
 
@@ -23,10 +28,10 @@ class SkeletonSmokeTests(TestCase):
         for path in ["/dashboard", "/monitoring", "/diagnosis", "/decision", "/devices", "/api-docs"]:
             response = self.client.get(path)
             self.assertEqual(response.status_code, 302, msg=path)
-            self.assertEqual(response.headers["Location"], "/login")
+            self.assertEqual(response.headers["Location"], "/user/login")
 
     def test_protected_pages_are_available_after_login(self):
-        login_response = self.login_demo_user()
+        login_response = self.login_test_user()
         self.assertEqual(login_response.status_code, 302)
         self.assertEqual(login_response.headers["Location"], "/dashboard")
 

@@ -1,5 +1,6 @@
 import importlib.util
 import os
+import sys
 from pathlib import Path
 
 
@@ -7,12 +8,25 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = BASE_DIR.parent
 FRONTEND_DIR = ROOT_DIR / "frontend"
 
+
+def load_env_file(env_path):
+    if not env_path.exists():
+        return
+    for raw_line in env_path.read_text(encoding="utf-8").splitlines():
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.split("=", 1)
+        os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
+load_env_file(ROOT_DIR / ".env")
+
 SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-dragonfruit-platform-secret-key")
 DEBUG = os.getenv("DJANGO_DEBUG", "true").lower() == "true"
 ALLOWED_HOSTS = [host for host in os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost,testserver").split(",") if host]
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
@@ -30,10 +44,10 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "apps.common.middleware.DemoLoginRequiredMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "apps.common.middleware.DemoLoginRequiredMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -69,19 +83,29 @@ TEMPLATES = [
 ]
 
 DB_ENGINE = os.getenv("DB_ENGINE", "sqlite").lower()
+RUNNING_TESTS = "test" in sys.argv
+
+if DB_ENGINE == "mysql" and not RUNNING_TESTS:
+    try:
+        import MySQLdb  # noqa: F401
+    except ImportError:
+        if importlib.util.find_spec("pymysql"):
+            import pymysql
+
+            pymysql.install_as_MySQLdb()
 
 MYSQL_CONFIG = {
     "ENGINE": "django.db.backends.mysql",
-    "NAME": os.getenv("MYSQL_NAME", "dragonfruit_ai"),
+    "NAME": os.getenv("MYSQL_NAME", "dragon_fruit"),
     "USER": os.getenv("MYSQL_USER", "root"),
-    "PASSWORD": os.getenv("MYSQL_PASSWORD", "root"),
+    "PASSWORD": os.getenv("MYSQL_PASSWORD", "12345"),
     "HOST": os.getenv("MYSQL_HOST", "127.0.0.1"),
     "PORT": os.getenv("MYSQL_PORT", "3306"),
     "OPTIONS": {"charset": "utf8mb4"},
     "TODO": "后续切换到 MySQL 时启用该配置，并安装 mysqlclient 或兼容驱动。",
 }
 
-if DB_ENGINE == "mysql":
+if DB_ENGINE == "mysql" and not RUNNING_TESTS:
     DATABASES = {"default": MYSQL_CONFIG}
 else:
     DATABASES = {
@@ -160,9 +184,4 @@ SYSTEM_META = {
     "CURRENT_PHASE": "第一阶段：单体脚手架、页面骨架、API 占位与扩展接口预留",
 }
 
-DEMO_ACCOUNT = {
-    "username": os.getenv("DEMO_USERNAME", "admin"),
-    "password": os.getenv("DEMO_PASSWORD", "123456"),
-    "display_name": os.getenv("DEMO_DISPLAY_NAME", "园区总控员"),
-    "role": os.getenv("DEMO_ROLE", "农业数字化管理员"),
-}
+ADMIN_INVITE_CODE = os.getenv("ADMIN_INVITE_CODE", "liyang")

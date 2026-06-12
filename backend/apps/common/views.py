@@ -12,7 +12,7 @@ from .mock_dashboard import get_dashboard_payload
 
 
 def index_view(request):
-    return redirect("/dashboard" if is_demo_authenticated(request) else "/login")
+    return redirect("/dashboard" if is_demo_authenticated(request) else "/user/login")
 
 
 def dashboard_view(request):
@@ -67,9 +67,13 @@ class ApiRootView(APIView):
                 "data": {
                     "name": settings.SYSTEM_META["NAME"],
                     "phase": settings.SYSTEM_META["CURRENT_PHASE"],
-                    "auth_mode": "基础登录校验占位，HTML 页面受会话保护，API 当前默认开放用于演示。",
+                    "auth_mode": "Django Auth 用户管理，普通用户与管理员分入口登录注册，API 当前默认开放用于演示。",
                     "endpoints": {
                         "login": "/login",
+                        "user_login": "/user/login",
+                        "user_register": "/user/register",
+                        "admin_login": "/admin/login",
+                        "admin_register": "/admin/register",
                         "logout": "/logout",
                         "health": "/api/health",
                         "api_docs": "/api-docs",

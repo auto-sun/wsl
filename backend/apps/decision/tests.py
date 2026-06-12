@@ -1,15 +1,19 @@
-from django.conf import settings
+from django.contrib.auth.models import User
 from django.test import Client, TestCase
 
 
 class DecisionSmokeTests(TestCase):
     def setUp(self):
         self.client = Client()
+        User.objects.create_user(
+            username="test_user",
+            password="123456",
+        )
         self.client.post(
             "/login",
             {
-                "username": settings.DEMO_ACCOUNT["username"],
-                "password": settings.DEMO_ACCOUNT["password"],
+                "username": "test_user",
+                "password": "123456",
             },
         )
 

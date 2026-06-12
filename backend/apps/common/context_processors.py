@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from .auth import get_demo_user
+from .auth import get_current_user
 
 
 NAV_ITEMS = [
@@ -15,8 +15,14 @@ NAV_ITEMS = [
 
 def build_breadcrumbs(path):
     current = next((item for item in NAV_ITEMS if item["path"] == path), None)
-    if path == "/login":
+    if path in {"/login", "/user/login"}:
         return [{"label": "登录", "path": "/login"}]
+    if path == "/user/register":
+        return [{"label": "普通用户注册", "path": "/user/register"}]
+    if path == "/admin/login":
+        return [{"label": "管理员登录", "path": "/admin/login"}]
+    if path == "/admin/register":
+        return [{"label": "管理员注册", "path": "/admin/register"}]
     if current is None:
         return [
             {"label": "系统首页", "path": "/dashboard"},
@@ -35,6 +41,6 @@ def layout_context(request):
         "system_meta": settings.SYSTEM_META,
         "nav_items": NAV_ITEMS,
         "current_path": request.path,
-        "current_user": get_demo_user(request),
+        "current_user": get_current_user(request),
         "breadcrumbs": build_breadcrumbs(request.path),
     }

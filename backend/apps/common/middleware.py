@@ -5,15 +5,9 @@ from .auth import is_demo_authenticated
 
 class DemoLoginRequiredMiddleware:
     """
-    基础登录校验占位。
+    页面登录保护。
 
-    当前阶段：
-    - 仅保护 HTML 页面访问
-    - API 暂保持可直接访问，便于开发演示和调试
-
-    后续阶段：
-    - 可切换为更细粒度权限控制
-    - 可对接 Django Auth / JWT / 单点登录
+    当前仅保护 HTML 页面访问，API 暂保持可直接访问，便于开发演示和调试。
     """
 
     protected_paths = {
@@ -25,7 +19,18 @@ class DemoLoginRequiredMiddleware:
         "/api-docs",
     }
 
-    allowed_prefixes = ("/login", "/logout", "/api/", "/static/", "/media/", "/admin/")
+    allowed_prefixes = (
+        "/login",
+        "/register",
+        "/user/login",
+        "/user/register",
+        "/admin/login",
+        "/admin/register",
+        "/logout",
+        "/api/",
+        "/static/",
+        "/media/",
+    )
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -36,6 +41,6 @@ class DemoLoginRequiredMiddleware:
             return self.get_response(request)
 
         if path in self.protected_paths and not is_demo_authenticated(request):
-            return redirect("/login")
+            return redirect("/user/login")
 
         return self.get_response(request)
